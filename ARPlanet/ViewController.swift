@@ -20,14 +20,29 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Set the view's delegate
         sceneView.delegate = self
         
-        // Show statistics such as fps and timing information
-        sceneView.showsStatistics = true
+        let sphere = SCNSphere(radius: 5)
+        let material = SCNMaterial()
+        material.diffuse.contents = UIImage(named: "art.scnassets/8k_jupiter.jpg")
+        sphere.materials = [material]
         
-        // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        let node = SCNNode()
+        node.position = SCNVector3(x: 3.0, y: 4.0, z: -9.0)
+        node.geometry = sphere
         
-        // Set the scene to the view
-        sceneView.scene = scene
+        sceneView.scene.rootNode.addChildNode(node)
+        sceneView.autoenablesDefaultLighting = true
+        node.runAction(SCNAction.rotateBy(
+            x: 0,
+            y: CGFloat((2*Float.pi) * 5),
+            z: 0,
+            duration: 360)
+        )
+        
+//        // Create a new scene
+//        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+//
+//        // Set the scene to the view
+//        sceneView.scene = scene
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -47,29 +62,4 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
     }
 
-    // MARK: - ARSCNViewDelegate
-    
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
-     
-        return node
-    }
-*/
-    
-    func session(_ session: ARSession, didFailWithError error: Error) {
-        // Present an error message to the user
-        
-    }
-    
-    func sessionWasInterrupted(_ session: ARSession) {
-        // Inform the user that the session has been interrupted, for example, by presenting an overlay
-        
-    }
-    
-    func sessionInterruptionEnded(_ session: ARSession) {
-        // Reset tracking and/or remove existing anchors if consistent tracking is required
-        
-    }
 }
